@@ -7,9 +7,15 @@ let
   };
 in
 with inputs; {
-
-  nil = inputs.nil.packages.${prev.system}.nil;
+  nil = inputs.lsp-nil.packages.${prev.system}.nil;
 
   # Packaging plugins with Nix
-  # lsp-config = plugin "lsp-config" lsp-config-src;
+  alpha = plugin "alpha" plugin-alpha-nvim;
+  impatient = plugin "impatient" plugin-impatient-nvim;
+  filetype = plugin "filetype" plugin-filetype-nvim;
+  startuptime = plugin "startuptime" plugin-startuptime;
+  popup = plugin "popup" plugin-popup-nvim;
+  plenary = plugin "plenary" plugin-plenary-nvim;
+  which-key = plugin "which-key" plugin-which-key-nvim;
+  lsp-config = plugin "lsp-config" lsp-config;
 }
