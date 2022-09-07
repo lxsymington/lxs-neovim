@@ -5,16 +5,8 @@
   inputs = {
     nixpkgs.url = "github:Nixos/nixpkgs";
     flake-utils.url = "github:numtide/flake-utils";
-    nix2vim = {
-      url = "github:gytis-ivaskevicius/nix2vim";
-      inputs.nixpkgs.follows = "nixpkgs";
-    };
     neovim = {
       url = "github:neovim/neovim?dir=contrib";
-    };
-    dotfiles = {
-      url = "github:lxsymington/dotfiles";
-      flake = false;
     };
 
     lsp-config = {
@@ -63,38 +55,52 @@
     };
   };
 
-  outputs = inputs@{ self, flake-utils, nixpkgs, neovim, nix2vim, lsp-nil, ... }:
-    flake-utils.lib.eachDefaultSystem (system:
-      let
-        pkgs = import nixpkgs {
-          inherit system;
-          overlays = [
-            neovim.overlay
-            (import ./plugins.nix inputs)
-	    nix2vim.overlay
-          ];
-        };
-        neovimConfig = pkgs.neovimBuilder {
-          # Build with NodeJS
-          withNodeJs = true;
-          withPython3 = true;
-          package = pkgs.neovim;
-	  imports = [
-	    ./modules/core
-	    ./modules/plugins/alpha
-	    ./modules/plugins/impatient
-	    ./modules/plugins/which-key
-	    ./modules/lsp/nil
-	  ];
-        };
-      in
+  outputs = { self, flake-utils, nixpkgs, neovim, lsp-nil, ... }@inputs:
+    let
+      externalDependencies = final: prev: {
+        rnix-lsp = lsp-nil.defaultPackage.${final.system};
+        neovim-nightly = neovim.defaultPackage.${final.system};
+      };
+      
+      lib = import ./lib;
+      
+      finalPkgs = lib.mkPkgs {
+        inherit flake-utils nixpkgs;
+        overlays = [
+          externalDependencies
+          (import ./plugins.nix inputs)
+        ];
+      };
+      
+      mkNeovimPkg = pkgs: lib.neovimBuilder {
+        #inherit pkgs;
+        pkgs = builtins.trace finalPkgs pkgs;
+        config = {};
+        #imports = [
+          #./modules/core
+          #./modules/plugins/alpha
+          #./modules/plugins/impatient
+          #./modules/plugins/which-key
+          #./modules/lsp/nil
+        #];
+      };
+    in flake-utils.lib.eachDefaultSystem (system:
       {
+        packages = {
+          lxs-neovim = mkNeovimPkg finalPkgs."${system}";
+        };
         # The package built by `nix build .`
-        defaultPackage = neovimConfig;
+        defaultPackage = self.packages."${system}".lxs-neovim;
         # The app run by `nix run .`
-        apps.defaultApp = {
-          type = "app";
-          program = "${neovimConfig}/bin/nvim";
+        apps = {
+          nvim = {
+            type = "app";
+            program = "${self.defaultPackage."${system}"}/bin/nvim";
+          };
+          defaultApp = {
+            type = "app";
+            program = "${self.defaultPackage."${system}"}/bin/nvim";
+          };
         };
       });
 }
