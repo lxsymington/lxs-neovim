@@ -57,9 +57,35 @@
 
   outputs = { self, flake-utils, nixpkgs, neovim, lsp-nil, ... }@inputs:
     let
-      externalDependencies = final: prev: {
+      externalDependencyOverlays = final: prev: {
         rnix-lsp = lsp-nil.defaultPackage.${final.system};
       };
+      
+      plugins = [
+        "plugin-alpha-nvim"
+        "plugin-impatient-nvim"
+        "plugin-filetype-nvim"
+        "plugin-startuptime"
+        "plugin-popup-nvim"
+        "plugin-plenary-nvim"
+        "plugin-which-key-nvim"
+        "plugin-lush-nvim"
+        "plugin-shipwright-nvim"
+      ];
+      
+      pluginOverlays = final: prev:
+        let
+          buildPlugin = name: final.vimUtils.buildVimPluginFrom2Nix {
+            pname = name;
+            version = "master";
+            src = builtins.getAttr name inputs;
+          };
+        in {
+          neovimPlugins = builtins.listToAttrs (map (name: {
+            inherit name;
+            value = buildPlugin name;
+          }) plugins);
+        };
       
       lib = import ./lib;
       
@@ -67,22 +93,14 @@
         inherit flake-utils nixpkgs;
         overlays = [
           neovim.overlay
-          externalDependencies
-          (import ./plugins.nix inputs)
+          externalDependencyOverlays
+          pluginOverlays
         ];
       };
       
       mkNeovimPkg = pkgs: lib.neovimBuilder {
-        #inherit pkgs;
-        pkgs = builtins.trace finalPkgs pkgs;
+        inherit pkgs;
         config = {};
-        #imports = [
-          #./modules/core
-          #./modules/plugins/alpha
-          #./modules/plugins/impatient
-          #./modules/plugins/which-key
-          #./modules/lsp/nil
-        #];
       };
     in flake-utils.lib.eachDefaultSystem (system:
       {

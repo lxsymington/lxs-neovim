@@ -1,6 +1,6 @@
 { config, lib, pkgs, ... }:
 {
   imports = [
-    ./utils/autocommands
+    ./plugins/performance
   ];
 }
