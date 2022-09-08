@@ -59,7 +59,6 @@
     let
       externalDependencies = final: prev: {
         rnix-lsp = lsp-nil.defaultPackage.${final.system};
-        neovim-nightly = neovim.defaultPackage.${final.system};
       };
       
       lib = import ./lib;
@@ -67,6 +66,7 @@
       finalPkgs = lib.mkPkgs {
         inherit flake-utils nixpkgs;
         overlays = [
+          neovim.overlay
           externalDependencies
           (import ./plugins.nix inputs)
         ];

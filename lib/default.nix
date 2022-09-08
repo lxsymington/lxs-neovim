@@ -32,8 +32,7 @@ rec {
         inherit pkgs;
       };
     };
-  in pkgs.wrapNeovim pkgs.neovim-nightly {
-    defaultEditor = true;
+  in pkgs.wrapNeovim pkgs.neovim {
     viAlias = vim.viAlias ? true;
     vimAlias = vim.vimAlias ? true;
     withNodeJs = vim.withNodeJs ? true;
@@ -45,6 +44,5 @@ rec {
         opt = vim.optPlugins;
       };
     };
-    runtime = {} // vim.runtime;
   };
 }
