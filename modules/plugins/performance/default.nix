@@ -1,4 +1,8 @@
-{ pkgs, lib, config, ... }:
+{ pkgs, lib, config, system, ... }:
+let
+  inherit (pkgs.${system}) neovimPlugins;
+  test = builtins.trace config "test";
+in
 with lib;
 with builtins;
 {
@@ -11,7 +15,7 @@ with builtins;
   };
 
   config = {
-    vim.startPlugins = with pkgs.neovimPlugins; [
+    vim.startPlugins = with neovimPlugins; [
       {
         plugin = plugin-impatient-nvim;
         type = "lua";

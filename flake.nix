@@ -3,10 +3,11 @@
 
   # Input source for our derivation
   inputs = {
-    nixpkgs.url = "github:Nixos/nixpkgs";
+    nixpkgs.url = "github:Nixos/nixpkgs/nixpkgs-unstable";
     flake-utils.url = "github:numtide/flake-utils";
     neovim = {
       url = "github:neovim/neovim?dir=contrib";
+      inputs.nixpkgs.follows = "nixpkgs";
     };
 
     lsp-config = {
@@ -58,7 +59,7 @@
   outputs = { self, flake-utils, nixpkgs, neovim, lsp-nil, ... }@inputs:
     let
       externalDependencyOverlays = final: prev: {
-        rnix-lsp = lsp-nil.defaultPackage.${final.system};
+        rnix-lsp = lsp-nil.packages.${final.system}.default;
       };
       
       plugins = [
@@ -72,8 +73,17 @@
         "plugin-lush-nvim"
         "plugin-shipwright-nvim"
       ];
-      
-      pluginOverlays = final: prev:
+
+      pkgs = lib.mkPkgs {
+        inherit flake-utils nixpkgs;
+        overlays = [
+          neovim.overlay
+          externalDependencyOverlays
+          pluginOverlays
+        ];
+      };
+
+     pluginOverlays = final: prev:
         let
           buildPlugin = name: final.vimUtils.buildVimPluginFrom2Nix {
             pname = name;
@@ -86,39 +96,29 @@
             value = buildPlugin name;
           }) plugins);
         };
-      
-      lib = import ./lib;
-      
-      finalPkgs = lib.mkPkgs {
-        inherit flake-utils nixpkgs;
-        overlays = [
-          neovim.overlay
-          externalDependencyOverlays
-          pluginOverlays
-        ];
+
+      lib = import ./lib {
+        inherit pkgs inputs plugins;
       };
-      
-      mkNeovimPkg = pkgs: lib.neovimBuilder {
-        inherit pkgs;
-        config = {};
-      };
+
+      inherit (lib) neovimBuilder;
     in flake-utils.lib.eachDefaultSystem (system:
       {
-        packages = {
-          lxs-neovim = mkNeovimPkg finalPkgs."${system}";
+        packages = rec {
+          lxs-neovim = neovimBuilder {
+            inherit system;
+            config = {};
+          };
+          # The package built by `nix build .`
+          default = lxs-neovim;
         };
-        # The package built by `nix build .`
-        defaultPackage = self.packages."${system}".lxs-neovim;
         # The app run by `nix run .`
-        apps = {
+        apps = rec {
           nvim = {
             type = "app";
-            program = "${self.defaultPackage."${system}"}/bin/nvim";
+            program = "${self.packages."${system}".default}/bin/nvim";
           };
-          defaultApp = {
-            type = "app";
-            program = "${self.defaultPackage."${system}"}/bin/nvim";
-          };
+          defaultApp = nvim;
         };
       });
 }
