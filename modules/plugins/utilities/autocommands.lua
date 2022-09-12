@@ -4,6 +4,7 @@ local M = {}
 
 local augroup_store = {}
 
+-- Autocommand Group Store -------------
 M.session_augroups = setmetatable(augroup_store, {
 	__call = function(self, group_name, opts)
 		local final_opts = opts or { clear = true }
@@ -14,18 +15,17 @@ M.session_augroups = setmetatable(augroup_store, {
 })
 
 -- Autocommands Index ------------------
-function M.setup()
-	local highlight_yank_group = M.session_augroups('HighlightYank')
-	nvim_create_autocmd('TextYankPost', {
-		pattern = '*',
-		callback = function()
-			vim.highlight.on_yank({
-				higroup = 'IncSearch',
-				timeout = 150,
-			})
-		end,
-		group = highlight_yank_group,
-	})
-end
+local highlight_yank_group = M.session_augroups('HighlightYank')
+
+nvim_create_autocmd('TextYankPost', {
+	pattern = '*',
+	callback = function()
+		vim.highlight.on_yank({
+			higroup = 'IncSearch',
+			timeout = 150,
+		})
+	end,
+	group = highlight_yank_group,
+})
 
 return M

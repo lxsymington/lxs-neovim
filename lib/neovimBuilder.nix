@@ -1,12 +1,11 @@
-{ pkgs, ... }:
-{ config, system }:
+{ pkgs, config, ... }:
   let
-    inherit (pkgs.${system}) lib neovim-unwrapped neovimPlugins wrapNeovim;
+    inherit (pkgs) lib neovim neovimPlugins wrapNeovim;
     inherit (lib) evalModules;
     inherit (vimOptions.config) vim;
-    
-    customNeovim = neovim-unwrapped;
-    
+
+    customNeovim = neovim;
+
     vimOptions = evalModules {
       modules = [
         { imports = [ ../modules]; }
@@ -14,13 +13,11 @@
       ];
 
       specialArgs = {
-        inherit pkgs system;
+        inherit pkgs;
       };
     };
-  in wrapNeovim customNeovim {
-    viAlias = vim.viAlias ? true;
-    vimAlias = vim.vimAlias ? true;
-    withNodeJs = vim.withNodeJs ? true;
+   in wrapNeovim customNeovim {
+    inherit (vim) viAlias vimAlias withNodeJs;
     configure = {
       customRC = vim.configRC;
 

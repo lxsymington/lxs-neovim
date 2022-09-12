@@ -84,17 +84,15 @@
     "neovim": {
       "inputs": {
         "flake-utils": "flake-utils_3",
-        "nixpkgs": [
-          "nixpkgs"
-        ]
+        "nixpkgs": "nixpkgs_2"
       },
       "locked": {
         "dir": "contrib",
-        "lastModified": 1662742092,
-        "narHash": "sha256-JchdFfga0/2KGRecxlghtokRBr+8PTXDczs7o+XU+mc=",
+        "lastModified": 1662809454,
+        "narHash": "sha256-ecWMpzVNx7yBNMeyHsgB5JFkvs96q12dOLvDSfZee/c=",
         "owner": "neovim",
         "repo": "neovim",
-        "rev": "9b0e1256e25d387bf65cb9baa1edd99fbc128724",
+        "rev": "40f9f479b746d0f76fbdd4bc0567d593ca7a6070",
         "type": "github"
       },
       "original": {
@@ -121,6 +119,22 @@
       }
     },
     "nixpkgs_2": {
+      "locked": {
+        "lastModified": 1646254136,
+        "narHash": "sha256-8nQx02tTzgYO21BP/dy5BCRopE8OwE8Drsw98j+Qoaw=",
+        "owner": "nixos",
+        "repo": "nixpkgs",
+        "rev": "3e072546ea98db00c2364b81491b893673267827",
+        "type": "github"
+      },
+      "original": {
+        "owner": "nixos",
+        "ref": "nixos-unstable",
+        "repo": "nixpkgs",
+        "type": "github"
+      }
+    },
+    "nixpkgs_3": {
       "locked": {
         "lastModified": 1662096612,
         "narHash": "sha256-R+Q8l5JuyJryRPdiIaYpO5O3A55rT+/pItBrKcy7LM4=",
@@ -286,7 +300,7 @@
         "lsp-config": "lsp-config",
         "lsp-nil": "lsp-nil",
         "neovim": "neovim",
-        "nixpkgs": "nixpkgs_2",
+        "nixpkgs": "nixpkgs_3",
         "plugin-alpha-nvim": "plugin-alpha-nvim",
         "plugin-filetype-nvim": "plugin-filetype-nvim",
         "plugin-impatient-nvim": "plugin-impatient-nvim",

@@ -1,7 +1,6 @@
-{ pkgs, lib, config, system, ... }:
+{ pkgs, lib, config, ... }:
 let
-  inherit (pkgs.${system}) neovimPlugins;
-  test = builtins.trace config "test";
+  inherit (pkgs) neovimPlugins;
 in
 with lib;
 with builtins;
