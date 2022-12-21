@@ -150,22 +150,6 @@
         "type": "github"
       }
     },
-    "plugin-alpha-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1669699262,
-        "narHash": "sha256-uKJRMbNyQtiFhkrsniK7SqxM+XS2l3qffeCqmYznPuk=",
-        "owner": "goolord",
-        "repo": "alpha-nvim",
-        "rev": "21a0f2520ad3a7c32c0822f943368dc063a569fb",
-        "type": "github"
-      },
-      "original": {
-        "owner": "goolord",
-        "repo": "alpha-nvim",
-        "type": "github"
-      }
-    },
     "plugin-filetype-nvim": {
       "flake": false,
       "locked": {
@@ -195,22 +179,6 @@
       "original": {
         "owner": "lewis6991",
         "repo": "impatient.nvim",
-        "type": "github"
-      }
-    },
-    "plugin-lush-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1671189607,
-        "narHash": "sha256-Hct/DNJ8OPBil+qHSyyBK7sxoVTuuMaAmClPVVFLi38=",
-        "owner": "rktjmp",
-        "repo": "lush.nvim",
-        "rev": "4cc81a12731fbefce1582a940b755691eb3eb6d1",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rktjmp",
-        "repo": "lush.nvim",
         "type": "github"
       }
     },
@@ -246,22 +214,6 @@
         "type": "github"
       }
     },
-    "plugin-shipwright-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1641518431,
-        "narHash": "sha256-Gy0tIqH1dmZgcUvrUcNrqpMXi3gOgHq9X1SbjIZqSns=",
-        "owner": "rktjmp",
-        "repo": "shipwright.nvim",
-        "rev": "ab70e80bb67b7ed3350bec89dd73473539893932",
-        "type": "github"
-      },
-      "original": {
-        "owner": "rktjmp",
-        "repo": "shipwright.nvim",
-        "type": "github"
-      }
-    },
     "plugin-startuptime": {
       "flake": false,
       "locked": {
@@ -278,22 +230,6 @@
         "type": "github"
       }
     },
-    "plugin-which-key-nvim": {
-      "flake": false,
-      "locked": {
-        "lastModified": 1666956294,
-        "narHash": "sha256-IbJP6j+M+POPhX4YbewTJiSoELvDo6y+vF0RREqqm4c=",
-        "owner": "folke",
-        "repo": "which-key.nvim",
-        "rev": "61553aeb3d5ca8c11eea8be6eadf478062982ac9",
-        "type": "github"
-      },
-      "original": {
-        "owner": "folke",
-        "repo": "which-key.nvim",
-        "type": "github"
-      }
-    },
     "root": {
       "inputs": {
         "flake-utils": "flake-utils",
@@ -301,15 +237,11 @@
         "lsp-nil": "lsp-nil",
         "neovim": "neovim",
         "nixpkgs": "nixpkgs_3",
-        "plugin-alpha-nvim": "plugin-alpha-nvim",
         "plugin-filetype-nvim": "plugin-filetype-nvim",
         "plugin-impatient-nvim": "plugin-impatient-nvim",
-        "plugin-lush-nvim": "plugin-lush-nvim",
         "plugin-plenary-nvim": "plugin-plenary-nvim",
         "plugin-popup-nvim": "plugin-popup-nvim",
-        "plugin-shipwright-nvim": "plugin-shipwright-nvim",
-        "plugin-startuptime": "plugin-startuptime",
-        "plugin-which-key-nvim": "plugin-which-key-nvim"
+        "plugin-startuptime": "plugin-startuptime"
       }
     },
     "rust-overlay": {

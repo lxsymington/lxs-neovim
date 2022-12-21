@@ -1,6 +1,6 @@
 { pkgs, config, ... }:
   let
-    inherit (pkgs) lib neovim neovimPlugins wrapNeovim;
+    inherit (pkgs) lib neovim wrapNeovim;
     inherit (lib) evalModules;
     inherit (vimOptions.config) vim;
 
@@ -21,9 +21,9 @@
     configure = {
       customRC = vim.configRC;
 
-      packages.myVimPackage = with neovimPlugins; {
-        start = vim.startPlugins;
-        opt = vim.optPlugins;
+      packages.myVimPackage = {
+        start = builtins.filter (plugin: plugin != null) vim.startPlugins;
+        opt = builtins.filter (plugin: plugin != null) vim.optPlugins;
       };
     };
   }

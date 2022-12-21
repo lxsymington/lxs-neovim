@@ -1,6 +1,7 @@
 { config, lib, pkgs, ... }:
 with lib;
 with builtins;
+
 let
   cfg = config.vim;
 
@@ -9,49 +10,50 @@ let
     ${luaConfig}
     EOF
   '';
-in
-{
-  options.vim = {
-    viAlias = mkOption {
-      description = "Enable vi alias";
-      type = types.bool;
-      default = true;
-    };
+in {
+  options = {
+    vim = {
+      viAlias = mkOption {
+        description = "Enable vi alias";
+        type = types.bool;
+        default = true;
+      };
 
-    vimAlias = mkOption {
-      description = "Enable vim alias";
-      type = types.bool;
-      default = true;
-    };
-          
-    withNodeJs = mkOption {
-      description = "Include NodeJS and supporting package";
-      type = types.bool;
-      default = true;
-    };
-        
-    configRC = mkOption {
-      description = "$MYVIMRC contents";
-      type = types.lines;
-      default = "";
-    };
+      vimAlias = mkOption {
+        description = "Enable vim alias";
+        type = types.bool;
+        default = true;
+      };
 
-    luaConfigRC = mkOption {
-      description = "neovim lua config";
-      type = types.lines;
-      default = "";
-    };
+      withNodeJs = mkOption {
+        description = "Enable node js plugins and tools";
+        type = types.bool;
+        default = true;
+      };
 
-    startPlugins = mkOption {
-      description = "List of plugins to startup";
-      type = with types; listOf package;
-      default = [];
-    };
+      configRC = mkOption {
+        description = "vimrc contents";
+        type = types.lines;
+        default = "";
+      };
 
-    optPlugins = mkOption {
-      description = "List of plugins to startup";
-      type = with types; listOf package;
-      default = [];
+      luaConfigRC = mkOption {
+        description = "vim lua config";
+        type = types.lines;
+        default = "";
+      };
+
+      startPlugins = mkOption {
+        description = "List of plugins to be loaded at startup";
+        default = [ ];
+        type = with types; listOf (nullOr package);
+      };
+
+      optPlugins = mkOption {
+        description = "List of plugins to be optionally loaded";
+        default = [ ];
+        type = with types; listOf (nullOr package);
+      };
     };
   };
 
